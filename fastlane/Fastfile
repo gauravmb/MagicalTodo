@@ -2,7 +2,7 @@ default_platform(:ios)
 
 SCHEME       = "TodoApp"
 PROJECT      = "TodoApp.xcodeproj"
-DESTINATION  = "platform=iOS Simulator,name=iPhone 16"
+DESTINATION  = "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.5"
 
 platform :ios do
 
