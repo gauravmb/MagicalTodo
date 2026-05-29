@@ -1,0 +1,43 @@
+# SwiftLint Configuration
+# Project: TodoApp (iOS Native Static TODO App)
+# Swift 6, iOS 17+
+
+excluded:
+  - .build
+  - .specify
+  - specs
+  - DerivedData
+  - Packages
+
+opt_in_rules:
+  - array_init
+  - closure_spacing
+  - empty_count
+  - explicit_init
+  - first_where
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - missing_docs
+  - sorted_imports
+  - vertical_whitespace_between_cases
+
+disabled_rules:
+  - trailing_whitespace
+
+line_length:
+  warning: 120
+  error: 150
+  ignores_comments: true
+  ignores_urls: true
+
+type_body_length:
+  warning: 200
+  error: 300
+
+file_length:
+  warning: 400
+  error: 600
+
+function_body_length:
+  warning: 50
+  error: 80

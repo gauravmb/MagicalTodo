@@ -24,6 +24,19 @@ description: "Task list template for feature implementation"
 - **Single project**: `src/`, `tests/` at repository root
 - **Web app**: `backend/src/`, `frontend/src/`
 - **Mobile**: `api/src/`, `ios/src/` or `android/src/`
+<<<<<<< HEAD
+=======
+- **iOS (Clean Architecture/MVVM — this project)**:
+  - `TodoApp/Presentation/Views/` — SwiftUI views
+  - `TodoApp/Presentation/ViewModels/` — `@Observable` ViewModels
+  - `TodoApp/Domain/Models/` — pure Swift entities (no framework imports)
+  - `TodoApp/Domain/UseCases/` — use-case structs/classes
+  - `TodoApp/Domain/Repositories/` — repository protocols
+  - `TodoApp/Data/Repositories/` — SwiftData repository implementations
+  - `TodoApp/Data/Models/` — SwiftData `@Model` classes
+  - `TodoAppTests/` — XCTest unit tests (mirroring source structure)
+  - `TodoAppUITests/` — XCUITest UI tests
+>>>>>>> 001-static-todo-app
 - Paths shown below assume single project - adjust based on plan.md structure
 
 <!--
