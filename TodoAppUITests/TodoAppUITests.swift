@@ -8,7 +8,7 @@ final class TodoAppUITests: XCTestCase {
 
     private var app: XCUIApplication = XCUIApplication()
 
-    override func setUpWithError() throws {
+    override func setUp() async throws {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launchArguments = ["--uitesting"]
