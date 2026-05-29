@@ -87,10 +87,10 @@ final class TodoAppTests: XCTestCase {
 // MARK: - Mock Repository
 
 final class MockTaskRepository: TaskRepository {
-    var tasks: [Task] = []
-    var addedTasks: [Task] = []
-    var updatedTasks: [Task] = []
-    var deletedTasks: [Task] = []
+    nonisolated(unsafe) var tasks: [Task] = []
+    nonisolated(unsafe) var addedTasks: [Task] = []
+    nonisolated(unsafe) var updatedTasks: [Task] = []
+    nonisolated(unsafe) var deletedTasks: [Task] = []
 
     func fetchAll() async throws -> [Task] { tasks }
 

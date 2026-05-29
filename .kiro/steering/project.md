@@ -89,6 +89,8 @@ Enforced in use cases, thrown as `TaskValidationError`:
 - Cover acceptance scenarios per user story
 - Use `accessibilityLabel` values to find elements (set in views)
 - `continueAfterFailure = false` is the standard setup
+- UI test classes are annotated with `@MainActor`
+- `XCUIApplication` is declared as a plain `var` (not `lazy var`): `private var app: XCUIApplication = XCUIApplication()`
 
 ## Code Style
 

@@ -3,12 +3,10 @@
 
 import XCTest
 
+@MainActor
 final class TodoAppUITests: XCTestCase {
 
-    private lazy var app: XCUIApplication = {
-        let application = XCUIApplication()
-        return application
-    }()
+    private var app: XCUIApplication = XCUIApplication()
 
     override func setUpWithError() throws {
         continueAfterFailure = false

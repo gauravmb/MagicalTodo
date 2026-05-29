@@ -26,35 +26,11 @@ jobs:
       - name: Install SwiftLint
         run: brew install swiftlint
 
-      - name: Generate Xcode project
-        run: xcodegen generate
-        working-directory: my-first-spec-test
+      - name: Install Fastlane
+        run: brew install fastlane
 
-      - name: SwiftLint
-        run: swiftlint lint --strict
-        working-directory: my-first-spec-test
-
-      - name: Build
-        run: |
-          xcodebuild build \
-            -project TodoApp.xcodeproj \
-            -scheme TodoApp \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
-            -configuration Debug \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcpretty
-        working-directory: my-first-spec-test
-
-      - name: Unit Tests
-        run: |
-          xcodebuild test \
-            -project TodoApp.xcodeproj \
-            -scheme TodoApp \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
-            -only-testing:TodoAppTests \
-            -configuration Debug \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcpretty
+      - name: Run CI lane
+        run: fastlane ci
         working-directory: my-first-spec-test
 
       - name: Upload unit test results
@@ -62,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-results
-          path: my-first-spec-test/build/reports/
+          path: my-first-spec-test/fastlane/unit-test-results.xml
           retention-days: 7
 
   ui-tests:
@@ -80,26 +56,11 @@ jobs:
       - name: Install XcodeGen
         run: brew install xcodegen
 
-      - name: Generate Xcode project
-        run: xcodegen generate
-        working-directory: my-first-spec-test
+      - name: Install Fastlane
+        run: brew install fastlane
 
-      - name: Boot simulator
-        run: |
-          UDID=$(xcrun simctl list devices available | grep 'iPhone 16 (' | head -1 | grep -E -o '[0-9A-F-]{36}')
-          xcrun simctl boot "$UDID" || true
-          xcrun simctl bootstatus "$UDID" -b
-
-      - name: UI Tests
-        run: |
-          xcodebuild test \
-            -project TodoApp.xcodeproj \
-            -scheme TodoApp \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
-            -only-testing:TodoAppUITests \
-            -configuration Debug \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcpretty
+      - name: Run UI tests lane
+        run: fastlane ui_tests
         working-directory: my-first-spec-test
 
       - name: Upload UI test results
@@ -107,5 +68,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ui-test-results
-          path: my-first-spec-test/build/reports/
+          path: my-first-spec-test/fastlane/ui-test-results.xml
           retention-days: 7

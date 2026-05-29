@@ -20,44 +20,17 @@ jobs:
       - name: Select Xcode 16
         run: sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
 
-      - name: Show Xcode version
-        run: xcodebuild -version
-
       - name: Install XcodeGen
         run: brew install xcodegen
 
       - name: Install SwiftLint
         run: brew install swiftlint
 
-      - name: Generate Xcode project
-        run: xcodegen generate
-        working-directory: my-first-spec-test
+      - name: Install Fastlane
+        run: brew install fastlane
 
-      - name: SwiftLint
-        run: swiftlint lint --strict
-        working-directory: my-first-spec-test
-
-      - name: Build
-        run: |
-          xcodebuild build \
-            -project TodoApp.xcodeproj \
-            -scheme TodoApp \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
-            -configuration Debug \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcpretty
-        working-directory: my-first-spec-test
-
-      - name: Unit Tests
-        run: |
-          xcodebuild test \
-            -project TodoApp.xcodeproj \
-            -scheme TodoApp \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' \
-            -only-testing:TodoAppTests \
-            -configuration Debug \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcpretty
+      - name: Run CI lane
+        run: fastlane ci
         working-directory: my-first-spec-test
 
       - name: Upload test results
@@ -65,5 +38,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-results
-          path: my-first-spec-test/build/reports/
+          path: my-first-spec-test/fastlane/unit-test-results.xml
           retention-days: 7

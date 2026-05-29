@@ -1,0 +1,91 @@
+default_platform(:ios)
+
+SCHEME       = "TodoApp"
+PROJECT      = "TodoApp.xcodeproj"
+DESTINATION  = "platform=iOS Simulator,name=iPhone 16,OS=18.0"
+
+platform :ios do
+
+  # ── Shared setup ──────────────────────────────────────────────────────────
+
+  desc "Generate Xcode project from project.yml"
+  lane :generate do
+    project_root = File.expand_path("..", __dir__)
+    sh("xcodegen generate --spec #{project_root}/project.yml --project #{project_root}")
+  end
+
+  desc "Run SwiftLint"
+  lane :lint do
+    swiftlint(
+      mode: :lint,
+      strict: true,
+      raise_if_swiftlint_error: true
+    )
+  end
+
+  # ── CI lane (every branch) ────────────────────────────────────────────────
+
+  desc "Lint + Build + Unit Tests — runs on every push"
+  lane :ci do
+    generate
+    lint
+    build
+    unit_tests
+  end
+
+  # ── Full lane (main branch only) ──────────────────────────────────────────
+
+  desc "Lint + Build + Unit Tests + UI Tests — runs on main"
+  lane :full do
+    generate
+    lint
+    build
+    unit_tests
+    ui_tests
+  end
+
+  # ── Individual lanes ──────────────────────────────────────────────────────
+
+  desc "Build the app"
+  lane :build do
+    xcodebuild(
+      project: PROJECT,
+      scheme: SCHEME,
+      destination: DESTINATION,
+      configuration: "Debug",
+      xcargs: "CODE_SIGNING_ALLOWED=NO",
+      build: true
+    )
+  end
+
+  desc "Run unit tests"
+  lane :unit_tests do
+    run_tests(
+      project: PROJECT,
+      scheme: SCHEME,
+      destination: DESTINATION,
+      only_testing: ["TodoAppTests"],
+      configuration: "Debug",
+      xcargs: "CODE_SIGNING_ALLOWED=NO",
+      output_types: "junit",
+      output_files: "unit-test-results.xml",
+      fail_build: true
+    )
+  end
+
+  desc "Run UI tests"
+  lane :ui_tests do
+    run_tests(
+      project: PROJECT,
+      scheme: SCHEME,
+      destination: DESTINATION,
+      only_testing: ["TodoAppUITests"],
+      configuration: "Debug",
+      xcargs: "CODE_SIGNING_ALLOWED=NO",
+      output_types: "junit",
+      output_files: "ui-test-results.xml",
+      fail_build: true
+    )
+  end
+
+end
