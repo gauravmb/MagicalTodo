@@ -40,7 +40,15 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify compliance with all five constitution principles before proceeding:
+
+- [ ] **P-I SwiftUI-First**: All UI implemented in SwiftUI; no UIKit unless documented exception.
+- [ ] **P-II Clean Architecture/MVVM**: Domain layer has zero framework imports; layer dependency direction correct.
+- [ ] **P-III SwiftData**: Persistence uses SwiftData `@Model`; no CoreData or custom file I/O for task data.
+- [ ] **P-IV Swift 6 Concurrency**: `SWIFT_STRICT_CONCURRENCY = complete`; no DispatchQueue or callbacks in new code.
+- [ ] **P-V Offline-First**: No URLSession or networking code; zero external dependencies.
+
+Any violation MUST be documented in the Complexity Tracking table with justification.
 
 ## Project Structure
 
