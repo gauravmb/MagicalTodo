@@ -31,12 +31,11 @@ jobs:
 
       - name: Run CI lane
         run: fastlane ci
-        working-directory: my-first-spec-test
 
       - name: Upload test results
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-results
-          path: my-first-spec-test/fastlane/unit-test-results.xml
+          path: fastlane/unit-test-results.xml
           retention-days: 7
