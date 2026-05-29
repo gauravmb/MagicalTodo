@@ -2,7 +2,31 @@ default_platform(:ios)
 
 SCHEME       = "TodoApp"
 PROJECT      = "TodoApp.xcodeproj"
-DESTINATION  = "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.5"
+
+# Resolve the best available iPhone 16 simulator at runtime
+# so the same Fastfile works locally (iOS 18.0) and on CI (iOS 18.5/18.6)
+def resolve_destination
+  # Ask simctl for all available iPhone 16 runtimes, pick the highest stable iOS version
+  raw = `xcrun simctl list devices available --json 2>/dev/null`
+  require 'json'
+  devices = JSON.parse(raw)["devices"]
+  candidates = []
+  devices.each do |runtime, sims|
+    # Match stable iOS runtimes only (e.g. com.apple.CoreSimulator.SimRuntime.iOS-18-0)
+    next unless runtime =~ /SimRuntime\.iOS-(\d+)-(\d+)/
+    major = $1.to_i
+    minor = $2.to_i
+    next if major >= 26  # skip beta/visionOS-era runtimes
+    sims.each do |sim|
+      candidates << { major: major, minor: minor, udid: sim["udid"], name: sim["name"] } if sim["name"] == "iPhone 16"
+    end
+  end
+  raise "No iPhone 16 simulator found!" if candidates.empty?
+  best = candidates.max_by { |c| [c[:major], c[:minor]] }
+  "platform=iOS Simulator,id=#{best[:udid]}"
+end
+
+DESTINATION = resolve_destination
 
 platform :ios do
 
